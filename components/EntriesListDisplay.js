@@ -34,10 +34,12 @@ const EntriesListDisplay = () => {
       ) : (
         <ul className="space-y-4">
           {entries.map((entry) => (
-            <li key={entry._id} className="border p-4 rounded-lg">
-              <h2 className="text-xl font-semibold">{entry.title}</h2>
-              <p>{entry.notes}</p>
-              <p className="text-sm text-gray-500">
+            <li key={entry._id} className="border p-4 bg-slate-700 rounded-lg">
+              <h2 className="text-xl text-white font-semibold">
+                {entry.title}
+              </h2>
+              <p className="text-white">{entry.notes}</p>
+              <p className="text-sm text-white">
                 {new Date(entry.date).toLocaleDateString()}
               </p>
             </li>

@@ -6,6 +6,7 @@ export default function AddEntryPage() {
   const [title, setTitle] = useState("");
   const [notes, setNotes] = useState("");
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
