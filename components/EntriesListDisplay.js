@@ -31,6 +31,10 @@ const EntriesListDisplay = () => {
     }
   };
 
+  const handleUpdate = async (entryId) => {
+    //implement updatefunction
+  };
+
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -59,29 +63,46 @@ const EntriesListDisplay = () => {
       ) : (
         <ul className="space-y-4">
           {entries.map((entry) => (
-            <li key={entry._id} className="border p-4 bg-slate-700 rounded-lg">
-              {entry.imageUrl && (
-                <Image
-                  src={entry.imageUrl}
-                  alt={entry.title}
-                  width={300} // Specify the desired width
-                  height={200}
-                  className="w-full h-auto max-w-sm rounded-md object-cover"
-                />
-              )}
-              <h2 className="text-xl text-white font-semibold">
-                {entry.title}
-              </h2>
-              <p className="text-white">{entry.notes}</p>
-              <p className="text-sm text-white">
-                {new Date(entry.date).toLocaleDateString()}
-              </p>
-              <button
-                onClick={() => handleDelete(entry._id)}
-                className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                Delete
-              </button>
+            <li
+              key={entry._id}
+              className=" flex border p-4 bg-slate-700 rounded-lg"
+            >
+              <div className="flex-1 flex border border-red-200">
+                {entry.imageUrl && (
+                  <Image
+                    src={entry.imageUrl}
+                    alt={entry.title}
+                    width={300} // Specify the desired width
+                    height={200}
+                    className="w-full h-auto max-w-sm rounded-md object-cover"
+                  />
+                )}
+                <div className=" flex flex-col p-4">
+                  <h2 className="text-xl text-white font-semibold">
+                    {entry.title}
+                  </h2>
+                  <p className="text-white">{entry.notes}</p>
+                  <p className="text-sm text-white">
+                    {new Date(entry.date).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col  border border-red-200">
+                <button
+                  onClick={() => handleDelete(entry._id)}
+                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+
+                <button
+                  onClick={() => handleUpdate(entry._id)}
+                  className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-red-600"
+                >
+                  Update
+                </button>
+              </div>
             </li>
           ))}
         </ul>

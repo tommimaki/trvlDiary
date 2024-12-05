@@ -11,7 +11,7 @@ const EntrySchema = new mongoose.Schema({
   },
   imageUrl: { type: String },
   publicId: {
-    type: String, // Stores the Cloudinary publicId
+    type: String,
   },
   date: {
     type: Date,

@@ -96,13 +96,16 @@ export default function AddEntryPage() {
   };
 
   return (
-    <div className="bg-black">
+    <div className="bg-black h-screen flex flex-col justify-center items-center">
       <h1>Add Entry</h1>
-      <form onSubmit={handleSubmit}>
+      <form
+        className=" border border-red-200 flex flex-col p-4 h-60 justify-between items-start"
+        onSubmit={handleSubmit}
+      >
         <div>
           <label htmlFor="title">Title:</label>
           <input
-            className="text-black"
+            className=" text-bold rounded-lg bg-slate-500"
             type="text"
             id="title"
             value={title}
@@ -113,7 +116,7 @@ export default function AddEntryPage() {
         <div>
           <label htmlFor="notes">Notes:</label>
           <textarea
-            className="text-black"
+            className=" text-bold rounded-lg bg-slate-500"
             id="notes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
@@ -144,7 +147,12 @@ export default function AddEntryPage() {
           </div>
         )}
 
-        <button type="submit">Add Entry</button>
+        <button
+          className="bg-green-800 p-2 rounded-lg font-bold "
+          type="submit"
+        >
+          Add Entry
+        </button>
       </form>
       {message && <p>{message}</p>}
     </div>
