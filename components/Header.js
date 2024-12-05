@@ -1,10 +1,19 @@
 import React from "react";
-
+import Link from "next/link";
 const Header = () => {
   return (
-    <div className="w-full bg-slate-400">
-      {" "}
-      <h2>Header</h2>
+    <div className="w-full bg-slate-400 p-4">
+      <nav className="flex space-x-4">
+        <Link href="/" className="text-white hover:underline">
+          Home
+        </Link>
+        <Link href="/entries" className="text-white hover:underline">
+          Entries
+        </Link>
+        <Link href="/entries/add" className="text-white hover:underline">
+          Add Entry
+        </Link>
+      </nav>
     </div>
   );
 };
