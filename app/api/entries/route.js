@@ -1,5 +1,4 @@
 import dbConnect from "@/lib/mongoose";
-
 import Entry from "@/models/Entry";
 
 // haetaan kaikki entryt
@@ -21,6 +20,7 @@ export async function POST(req) {
   await dbConnect();
   const body = await req.json(); // Haetaan POST-data reqistä
 
+  console.log(body, " reqbody in post /entries ");
   try {
     const newEntry = await Entry.create(body); // Luodaan uusi merkintä
     return new Response(JSON.stringify(newEntry), { status: 201 });

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 const EntriesListDisplay = () => {
   const [entries, setEntries] = useState([]);
@@ -10,7 +11,6 @@ const EntriesListDisplay = () => {
       try {
         const res = await fetch("/api/entries");
         const data = await res.json();
-        console.log("Fetched entries:", data);
         setEntries(data);
       } catch (error) {
         console.error("Error fetching entries: ", error);
@@ -35,6 +35,15 @@ const EntriesListDisplay = () => {
         <ul className="space-y-4">
           {entries.map((entry) => (
             <li key={entry._id} className="border p-4 bg-slate-700 rounded-lg">
+              {entry.imageUrl && (
+                <Image
+                  src={entry.imageUrl}
+                  alt={entry.title}
+                  width={300} // Specify the desired width
+                  height={200}
+                  className="w-full h-auto max-w-sm rounded-md object-cover"
+                />
+              )}
               <h2 className="text-xl text-white font-semibold">
                 {entry.title}
               </h2>

@@ -9,7 +9,7 @@ const EntrySchema = new mongoose.Schema({
   notes: {
     type: String,
   },
-  image: { type: String },
+  imageUrl: { type: String },
   date: {
     type: Date,
     default: Date.now,
