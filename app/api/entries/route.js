@@ -10,7 +10,7 @@ export async function GET(req) {
     return new Response(JSON.stringify(entries), { status: 200 }); // palautetaan stringifyed
   } catch (error) {
     return new Response(JSON.stringify({ error: "error fetching entries" }), {
-      //error catchi
+      //error catch
       status: 500,
     });
   }

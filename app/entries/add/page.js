@@ -1,6 +1,7 @@
 "use client"; // Tarvitaan, koska käytämme lomakkeen tilaa
 
 import { useState, useRef } from "react";
+import Image from "next/image";
 
 export default function AddEntryPage() {
   const [title, setTitle] = useState("");
@@ -21,9 +22,9 @@ export default function AddEntryPage() {
     if (image) {
       setIsSubmitting(true);
       try {
-        // **Step 1:** Upload Image to Server-Side API
+        //  Uploading Image to Server-Side API
         const formData = new FormData();
-        formData.append("image", image); // Ensure the key matches the server-side expectation
+        formData.append("image", image);
 
         const uploadResponse = await fetch("/api/upload-image", {
           method: "POST",
@@ -49,7 +50,7 @@ export default function AddEntryPage() {
     }
 
     try {
-      // **Step 2:** Submit Form Data to MongoDB API
+      //  Form Data to MongoDB API with image url
       const res = await fetch("/api/entries", {
         method: "POST",
         headers: {
@@ -84,7 +85,6 @@ export default function AddEntryPage() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Optional: Validate file type and size here
       setImage(file);
     }
   };
@@ -113,7 +113,7 @@ export default function AddEntryPage() {
             onChange={(e) => setNotes(e.target.value)}
           />
         </div>
-        {/* Image Upload Field */}
+
         <div>
           <label htmlFor="image">Upload Image:</label>
           <input
@@ -127,11 +127,15 @@ export default function AddEntryPage() {
           />
         </div>
 
-        {/* Image Preview */}
         {image && (
           <div>
             <p>Image Preview:</p>
-            <img src={URL.createObjectURL(image)} alt="Selected Image" />
+            <Image
+              src={URL.createObjectURL(image)}
+              width={300} // width mandatory
+              height={200}
+              alt="Selected Image"
+            />
           </div>
         )}
 

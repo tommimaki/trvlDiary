@@ -6,6 +6,31 @@ const EntriesListDisplay = () => {
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const handleDelete = async (entryId) => {
+    const confirmDelete = confirm(
+      "Are you sure you want to delete this entry?"
+    );
+    if (!confirmDelete) return;
+
+    try {
+      const res = await fetch(`/api/entries/${entryId}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        // Optionally, remove the entry from the state to update the UI
+        setEntries(entries.filter((entry) => entry._id !== entryId));
+        alert("Entry deleted successfully.");
+      } else {
+        const errorData = await res.json();
+        alert(`Error: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("Error deleting entry:", error);
+      alert("An unexpected error occurred.");
+    }
+  };
+
   useEffect(() => {
     const fetchEntries = async () => {
       try {
@@ -51,6 +76,12 @@ const EntriesListDisplay = () => {
               <p className="text-sm text-white">
                 {new Date(entry.date).toLocaleDateString()}
               </p>
+              <button
+                onClick={() => handleDelete(entry._id)}
+                className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
             </li>
           ))}
         </ul>
