@@ -8,7 +8,6 @@ export default function AddEntryPage() {
   const [notes, setNotes] = useState("");
   const [image, setImage] = useState(null);
   const [message, setMessage] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -16,8 +15,8 @@ export default function AddEntryPage() {
     e.preventDefault();
 
     setMessage(""); // Clear any previous messages
-
     let uploadedImageUrl = "";
+    let uploadedPublicId = "";
 
     if (image) {
       setIsSubmitting(true);
@@ -39,7 +38,10 @@ export default function AddEntryPage() {
         const uploadData = await uploadResponse.json();
         console.log("uploadData in addentrypage", uploadData);
         uploadedImageUrl = uploadData.imageUrl;
+        uploadedPublicId = uploadData.publicId;
         console.log("uploadedImageUrl in addentrypage", uploadedImageUrl);
+        console.log("uploadedPublicUrl in addentrypage", uploadedPublicId);
+        console.log("publicId in addentrypage", uploadedPublicId);
         setMessage("Image uploaded successfully.");
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -56,7 +58,12 @@ export default function AddEntryPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ title, notes, imageUrl: uploadedImageUrl }),
+        body: JSON.stringify({
+          title,
+          notes,
+          imageUrl: uploadedImageUrl,
+          publicId: uploadedPublicId,
+        }),
       });
 
       if (res.ok) {
@@ -64,7 +71,6 @@ export default function AddEntryPage() {
         setTitle("");
         setNotes("");
         setImage(null);
-        setImageUrl("");
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
         }
@@ -123,7 +129,6 @@ export default function AddEntryPage() {
             ref={fileInputRef}
             onChange={handleImageChange}
             accept="image/*"
-            required
           />
         </div>
 

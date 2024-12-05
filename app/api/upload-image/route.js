@@ -61,7 +61,10 @@ export async function POST(request) {
 
     // Respond with the image URL
     return NextResponse.json(
-      { imageUrl: uploadResult.secure_url },
+      {
+        imageUrl: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
+      },
       { status: 200 }
     );
   } catch (error) {
