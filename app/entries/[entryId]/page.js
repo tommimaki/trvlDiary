@@ -5,7 +5,8 @@ import Link from "next/link";
 import dbConnect from "@/lib/mongoose";
 import Entry from "@/models/Entry";
 import EditModalClient from "@/components/EditModalClient";
-import serializeEntry from "@/lib/serializeEntry"; // Import the helper
+import serializeEntry from "@/lib/serializeEntry";
+import DeleteComponent from "@/components/DeleteComponent";
 
 export default async function EntryPage({ params }) {
   const resolvedParams = await params;
@@ -27,6 +28,7 @@ export default async function EntryPage({ params }) {
   }
 
   const serializedEntry = serializeEntry(entry); // Serialize using the helper
+  console.log(serializeEntry);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-black flex items-center justify-center p-4">
@@ -68,6 +70,10 @@ export default async function EntryPage({ params }) {
 
         {/* Edit Modal Client Component */}
         <EditModalClient entry={serializedEntry} />
+        <DeleteComponent
+          entryId={serializedEntry._id}
+          redirectAfterDelete="/"
+        />
       </div>
     </div>
   );
