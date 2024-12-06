@@ -12,9 +12,12 @@ const EntriesListDisplay = () => {
   const [isFetching, setIsFetching] = useState(false); // Avoid multiple fetches simultaneously
 
   const handleDeleteSuccess = (entryId) => {
+    console.log("running handledeletesucces", entryId);
+    console.log("Before deletion:", entries); // Debug the current state
     setEntries((prevEntries) =>
       prevEntries.filter((entry) => entry._id !== entryId)
     );
+    console.log("After deletion:", entries); // Check if the state updates
   };
 
   const fetchEntries = async () => {
@@ -27,9 +30,14 @@ const EntriesListDisplay = () => {
       if (!res.ok) throw new Error("Failed to fetch entries");
 
       const data = await res.json();
-      console.log("Fetched entries:", data);
+      setEntries((prevEntries) => {
+        const uniqueEntries = data.entries.filter(
+          (newEntry) =>
+            !prevEntries.some((prevEntry) => prevEntry._id === newEntry._id)
+        );
+        return [...prevEntries, ...uniqueEntries];
+      });
 
-      setEntries((prevEntries) => [...prevEntries, ...data.entries]); // Append new entries
       setHasMore(data.page < data.totalPages); // Check if more pages are available
       setPage((prevPage) => prevPage + 1); // Increment page for the next fetch
     } catch (error) {
@@ -44,7 +52,6 @@ const EntriesListDisplay = () => {
   useEffect(() => {
     fetchEntries();
   }, []);
-  console.log("Entries:", entries);
 
   // Infinite scroll handler
   useEffect(() => {
@@ -85,6 +92,7 @@ const EntriesListDisplay = () => {
                     alt={entry.title}
                     width={300}
                     height={200}
+                    priority
                     className="w-full h-auto max-w-sm rounded-md object-cover"
                   />
                 )}
@@ -104,15 +112,12 @@ const EntriesListDisplay = () => {
                 </div>
               </div>
               <div className="flex flex-col border border-red-200">
-                {/* <button
-                  onClick={() => handleDelete(entry._id)}
-                  className="mt-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Delete
-                </button> */}
                 <DeleteComponent
                   entryId={entry._id}
-                  onDeleteSuccess={() => handleDeleteSuccess(entry._id)}
+                  onDeleteSuccess={() => {
+                    console.log("Delete success callback for ID:", entry._id);
+                    handleDeleteSuccess(entry._id);
+                  }}
                 />
               </div>
             </li>

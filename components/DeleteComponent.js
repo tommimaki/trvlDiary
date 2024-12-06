@@ -2,7 +2,11 @@
 
 import { useRouter } from "next/navigation";
 
-const DeleteComponent = ({ entryId, redirectAfterDelete = "/" }) => {
+const DeleteComponent = ({
+  entryId,
+  onDeleteSuccess, // Pass the callback from parent
+  redirectAfterDelete = null, // Default to null for list view
+}) => {
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -19,9 +23,14 @@ const DeleteComponent = ({ entryId, redirectAfterDelete = "/" }) => {
       if (res.ok) {
         alert("Entry deleted successfully.");
 
-        // If a redirect is needed after deletion
+        // Trigger the callback to update parent component
+        if (onDeleteSuccess) {
+          onDeleteSuccess(entryId);
+        }
+
+        // Redirect if specified
         if (redirectAfterDelete) {
-          router.push(redirectAfterDelete); // Redirect to the specified path
+          router.push(redirectAfterDelete);
         }
       } else {
         const errorData = await res.json();
