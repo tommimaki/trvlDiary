@@ -1,20 +1,50 @@
 import dbConnect from "@/lib/mongoose";
 import Entry from "@/models/Entry";
 
-// haetaan kaikki entryt
-export async function GET(req) {
-  await dbConnect(); //db connection
+// // haetaan kaikki entryt
+// export async function GET(req) {
+//   await dbConnect(); //db connection
 
+//   try {
+//     const entries = await Entry.find(); //otetaan kaikki entryt
+//     return new Response(JSON.stringify(entries), { status: 200 }); // palautetaan stringifyed
+//   } catch (error) {
+//     return new Response(JSON.stringify({ error: "error fetching entries" }), {
+//       //error catch
+//       status: 500,
+//     });
+//   }
+// }
+
+export async function GET(req) {
+  const { searchParams } = new URL(req.url);
+  await dbConnect();
+
+  const page = parseInt(searchParams.get("page") || "1", 10);
+  const limit = parseInt(searchParams.get("limit") || "10", 10);
+  const skip = (page - 1) * limit;
   try {
-    const entries = await Entry.find(); //otetaan kaikki entryt
-    return new Response(JSON.stringify(entries), { status: 200 }); // palautetaan stringifyed
+    // Fetch paginated data
+    const entries = await Entry.find()
+      .sort({ date: -1 }) // Sort by date, newest first
+      .skip(skip) // Skip documents for pagination
+      .limit(limit); // Limit the number of documents
+
+    const totalEntries = await Entry.countDocuments(); // Count total entries
+    const totalPages = Math.ceil(totalEntries / limit);
+
+    return new Response(
+      JSON.stringify({ entries, page, totalPages, totalEntries }),
+      { status: 200 }
+    );
   } catch (error) {
-    return new Response(JSON.stringify({ error: "error fetching entries" }), {
-      //error catch
+    console.error("Error fetching paginated entries:", error);
+    return new Response(JSON.stringify({ error: "Failed to fetch entries." }), {
       status: 500,
     });
   }
 }
+
 //lisätään entry
 export async function POST(req) {
   await dbConnect();

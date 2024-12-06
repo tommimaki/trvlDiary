@@ -26,7 +26,6 @@ export default async function EntryPage({ params }) {
     );
   }
 
-  console.log("entry", entry);
   const serializedEntry = serializeEntry(entry); // Serialize using the helper
 
   return (
@@ -50,8 +49,7 @@ export default async function EntryPage({ params }) {
               src={entry.imageUrl}
               alt={entry.title}
               layout="fill"
-              objectFit="cover"
-              className="rounded-md"
+              className="rounded-md object-cover"
               placeholder="blur"
               blurDataURL="/placeholder.png" // Optional: Placeholder image for better UX
             />
