@@ -1,8 +1,25 @@
+"use server";
 import dbConnect from "@/lib/mongoose";
 import Entry from "@/models/Entry";
 import { NextResponse } from "next/server";
 import cloudinary from "@/utils/cloudinary";
 // app/api/entries/[entryId]/route.js
+
+export async function GET(request, context) {
+  const { entryId } = context.params;
+  console.log(entryId);
+
+  await dbConnect();
+  try {
+    const entry = await Entry.findById(entryId);
+    console.log(entry);
+    return entry;
+  } catch (error) {
+    {
+      console.error("error fetching: ", error);
+    }
+  }
+}
 
 export async function DELETE(request, context) {
   // Awaiting the 'params' object if necessary

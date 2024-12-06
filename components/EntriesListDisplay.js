@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 const EntriesListDisplay = () => {
   const [entries, setEntries] = useState([]);
@@ -57,7 +58,7 @@ const EntriesListDisplay = () => {
 
   return (
     <div className="w-full p-4">
-      <h1 className="text-2xl font-bold">Diary Entries</h1>
+      <h1 className="text-2xl font-bold">Entries</h1>
       {entries.length === 0 ? (
         <p>No entries found</p>
       ) : (
@@ -78,13 +79,18 @@ const EntriesListDisplay = () => {
                   />
                 )}
                 <div className=" flex flex-col p-4">
-                  <h2 className="text-xl text-white font-semibold">
-                    {entry.title}
-                  </h2>
-                  <p className="text-white">{entry.notes}</p>
-                  <p className="text-sm text-white">
-                    {new Date(entry.date).toLocaleDateString()}
-                  </p>
+                  <Link
+                    href={`/entries/${entry._id}`}
+                    className="flex-1 flex flex-col"
+                  >
+                    <h2 className="text-xl text-white font-semibold">
+                      {entry.title}
+                    </h2>
+                    <p className="text-white">{entry.notes}</p>
+                    <p className="text-sm text-white">
+                      {new Date(entry.date).toLocaleDateString()}
+                    </p>
+                  </Link>
                 </div>
               </div>
 
