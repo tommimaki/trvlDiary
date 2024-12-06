@@ -26,29 +26,51 @@ export default async function EntryPage({ params }) {
     );
   }
 
+  console.log("entry", entry);
   const serializedEntry = serializeEntry(entry); // Serialize using the helper
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen text-black">
-      <Link
-        href="/"
-        className="text-blue-500 hover:underline mb-4 inline-block"
-      >
-        &larr; Back to home
-      </Link>
-      <h1 className="text-3xl font-bold mb-4">{serializedEntry.title}</h1>
-      {serializedEntry.imageUrl && (
-        <Image
-          src={serializedEntry.imageUrl}
-          alt={serializedEntry.title}
-          width={600}
-          height={400}
-          className="rounded mb-4"
-        />
-      )}
-      <p className="text-lg mb-6">{serializedEntry.notes}</p>
-      {/* Embed the Client Component with serialized data */}
-      <EditModalClient entry={serializedEntry} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-black flex items-center justify-center p-4">
+      <div className="bg-white bg-opacity-95 backdrop-blur-md rounded-lg shadow-lg w-full max-w-3xl p-8">
+        {/* Back Link */}
+        <Link
+          href="/"
+          className="text-indigo-600 hover:text-indigo-800 font-semibold mb-6 inline-block"
+        >
+          &larr; Back to Entries
+        </Link>
+
+        {/* Entry Title */}
+        <h1 className="text-4xl font-bold text-gray-800 mb-4">{entry.title}</h1>
+
+        {/* Entry Image */}
+        {entry.imageUrl && (
+          <div className="relative w-full h-64 mb-6">
+            <Image
+              src={entry.imageUrl}
+              alt={entry.title}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-md"
+              placeholder="blur"
+              blurDataURL="/placeholder.png" // Optional: Placeholder image for better UX
+            />
+          </div>
+        )}
+
+        {/* Entry Notes */}
+        <p className="text-lg text-gray-700 mb-6 whitespace-pre-wrap">
+          {entry.notes}
+        </p>
+
+        {/* Entry Metadata */}
+        <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 mb-6">
+          <span>Created At: {new Date(entry.date).toLocaleString()}</span>
+        </div>
+
+        {/* Edit Modal Client Component */}
+        <EditModalClient entry={serializedEntry} />
+      </div>
     </div>
   );
 }

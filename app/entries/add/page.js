@@ -36,12 +36,9 @@ export default function AddEntryPage() {
         }
 
         const uploadData = await uploadResponse.json();
-        console.log("uploadData in addentrypage", uploadData);
+
         uploadedImageUrl = uploadData.imageUrl;
         uploadedPublicId = uploadData.publicId;
-        console.log("uploadedImageUrl in addentrypage", uploadedImageUrl);
-        console.log("uploadedPublicUrl in addentrypage", uploadedPublicId);
-        console.log("publicId in addentrypage", uploadedPublicId);
         setMessage("Image uploaded successfully.");
       } catch (error) {
         console.error("Error uploading image:", error);
@@ -96,35 +93,58 @@ export default function AddEntryPage() {
   };
 
   return (
-    <div className="bg-black h-screen flex flex-col justify-center items-center">
-      <h1>Add Entry</h1>
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 to-black flex flex-col items-center justify-center p-4">
+      <h1 className="text-4xl font-bold text-white mb-8">Add Entry</h1>
       <form
-        className=" border border-red-200 flex flex-col p-4 h-60 justify-between items-start"
+        className="bg-white bg-opacity-90 backdrop-blur-md rounded-lg shadow-lg w-full max-w-md p-6 space-y-6"
         onSubmit={handleSubmit}
       >
+        {/* Title Field */}
         <div>
-          <label htmlFor="title">Title:</label>
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Title<span className="text-red-500">*</span>
+          </label>
           <input
-            className=" text-bold rounded-lg bg-slate-500"
+            className="w-full text-black px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
             type="text"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-          />
-        </div>
-        <div>
-          <label htmlFor="notes">Notes:</label>
-          <textarea
-            className=" text-bold rounded-lg bg-slate-500"
-            id="notes"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Enter title"
           />
         </div>
 
+        {/* Notes Field */}
         <div>
-          <label htmlFor="image">Upload Image:</label>
+          <label
+            htmlFor="notes"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Notes<span className="text-red-500">*</span>
+          </label>
+          <textarea
+            className="w-full text-black px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            id="notes"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            required
+            rows={4}
+            placeholder="Enter your notes"
+          ></textarea>
+        </div>
+
+        {/* Image Upload Field */}
+        <div>
+          <label
+            htmlFor="image"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
+            Upload Image
+          </label>
           <input
             type="file"
             id="image"
@@ -132,29 +152,35 @@ export default function AddEntryPage() {
             ref={fileInputRef}
             onChange={handleImageChange}
             accept="image/*"
+            className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-500 file:text-white hover:file:bg-indigo-600"
           />
         </div>
 
+        {/* Image Preview */}
         {image && (
-          <div>
-            <p>Image Preview:</p>
+          <div className="flex flex-col items-center">
+            <p className="text-sm text-gray-600 mb-2">Image Preview:</p>
             <Image
               src={URL.createObjectURL(image)}
-              width={300} // width mandatory
+              width={300}
               height={200}
               alt="Selected Image"
+              className="rounded-md object-cover"
             />
           </div>
         )}
 
+        {/* Submit Button */}
         <button
-          className="bg-green-800 p-2 rounded-lg font-bold "
+          className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 transition-colors"
           type="submit"
         >
           Add Entry
         </button>
       </form>
-      {message && <p>{message}</p>}
+
+      {/* Success Message */}
+      {message && <p className="mt-4 text-green-500">{message}</p>}
     </div>
   );
 }

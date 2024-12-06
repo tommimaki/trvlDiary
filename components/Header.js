@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 const Header = () => {
   return (
-    <div className="w-full bg-slate-400 p-4">
+    <div className="w-full bg-gradient-to-br from-slate-700 to-black p-4">
       <nav className="flex space-x-4">
         <Link href="/" className="text-white hover:underline">
           Home

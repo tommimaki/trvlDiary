@@ -67,8 +67,6 @@ export async function DELETE(request, context) {
           `Error deleting image from Cloudinary for entry ID ${entryId}:`,
           imageError
         );
-        // Decide how to handle image deletion failures
-        // For example, you might choose to proceed with deleting the entry or abort
       }
     }
 
@@ -81,6 +79,74 @@ export async function DELETE(request, context) {
     );
   } catch (error) {
     console.error("Error deleting entry:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error." },
+      { status: 500 }
+    );
+  }
+}
+export async function PATCH(request, context) {
+  const { entryId } = context.params;
+  console.log("Updating entry with ID:", entryId);
+
+  await dbConnect(); // Establish database connection
+
+  try {
+    // Parse the incoming JSON data
+    const body = await request.json();
+    const { title, notes, imageUrl, publicId } = body;
+
+    // Find the existing entry
+    const entry = await Entry.findById(entryId);
+
+    if (!entry) {
+      return NextResponse.json({ error: "Entry not found." }, { status: 404 });
+    }
+
+    // If a new image is provided, delete the old one from Cloudinary
+    if (imageUrl && publicId && entry.publicId) {
+      try {
+        const deleteResponse = await cloudinary.uploader.destroy(
+          entry.publicId
+        );
+        console.log("Deleted old image from Cloudinary:", deleteResponse);
+      } catch (deleteError) {
+        console.error(
+          `Error deleting old image from Cloudinary for entry ID ${entryId}:`,
+          deleteError
+        );
+        return NextResponse.json(
+          { error: "Failed to delete old image from Cloudinary." },
+          { status: 500 }
+        );
+      }
+    }
+
+    // Update the entry's fields
+    if (title) entry.title = title;
+    if (notes) entry.notes = notes;
+    if (imageUrl) entry.imageUrl = imageUrl;
+    if (publicId) entry.publicId = publicId;
+    entry.updatedAt = new Date();
+
+    await entry.save();
+
+    // Serialize the updated entry
+    const serializedEntry = {
+      _id: entry._id.toString(),
+      title: entry.title,
+      notes: entry.notes,
+      imageUrl: entry.imageUrl || null,
+      publicId: entry.publicId || null,
+      createdAt: entry.createdAt ? entry.createdAt.toISOString() : null,
+      updatedAt: entry.updatedAt ? entry.updatedAt.toISOString() : null,
+    };
+
+    console.log("Entry updated successfully:", serializedEntry);
+
+    return NextResponse.json(serializedEntry, { status: 200 });
+  } catch (error) {
+    console.error("Error updating entry:", error);
     return NextResponse.json(
       { error: "Internal Server Error." },
       { status: 500 }
