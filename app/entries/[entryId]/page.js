@@ -8,6 +8,8 @@ import EditModalClient from "@/components/EditModalClient";
 import serializeEntry from "@/lib/serializeEntry";
 import DeleteComponent from "@/components/DeleteComponent";
 
+import SingleViewMap from "@/components/SingleViewMap";
+
 export default async function EntryPage({ params }) {
   const resolvedParams = await params;
   const { entryId } = resolvedParams;
@@ -15,6 +17,7 @@ export default async function EntryPage({ params }) {
   await dbConnect();
 
   const entry = await Entry.findById(entryId).lean();
+  console.log(entry);
 
   if (!entry) {
     return (
@@ -27,8 +30,14 @@ export default async function EntryPage({ params }) {
     );
   }
 
-  const serializedEntry = serializeEntry(entry); // Serialize using the helper
-  console.log(serializeEntry);
+  const displayDate = entry.pictureDate
+    ? new Date(entry.pictureDate).toLocaleString()
+    : new Date(entry.date).toLocaleString();
+
+  const googleMapsUrl =
+    entry.latitude && entry.longitude
+      ? `https://www.google.com/maps?q=${entry.latitude},${entry.longitude}`
+      : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 to-black flex items-center justify-center p-4">
@@ -53,7 +62,8 @@ export default async function EntryPage({ params }) {
               layout="fill"
               className="rounded-md object-cover"
               placeholder="blur"
-              blurDataURL="/placeholder.png" // Optional: Placeholder image for better UX
+              blurDataURL="/placeholder.png"
+              unoptimized
             />
           </div>
         )}
@@ -65,13 +75,39 @@ export default async function EntryPage({ params }) {
 
         {/* Entry Metadata */}
         <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 mb-6">
-          <span>Created At: {new Date(entry.date).toLocaleString()}</span>
+          <span>Date: {displayDate}</span>
         </div>
 
-        {/* Edit Modal Client Component */}
-        <EditModalClient entry={serializedEntry} />
+        {/* Location Information */}
+        {entry.latitude && entry.longitude && (
+          <div className="text-gray-700 mb-6">
+            <p>
+              Coordinates: {entry.latitude}, {entry.longitude}
+            </p>
+            {googleMapsUrl && (
+              <p>
+                <a
+                  href={googleMapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:text-indigo-800"
+                >
+                  View on Google Maps
+                </a>
+              </p>
+            )}
+            {/* Map Display */}
+            <SingleViewMap
+              latitude={entry.latitude}
+              longitude={entry.longitude}
+            />
+          </div>
+        )}
+
+        {/* Edit and Delete Actions */}
+        <EditModalClient entry={serializeEntry(entry)} />
         <DeleteComponent
-          entryId={serializedEntry._id}
+          entryId={serializeEntry(entry)._id}
           redirectAfterDelete="/"
         />
       </div>

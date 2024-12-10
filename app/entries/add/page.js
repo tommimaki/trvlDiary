@@ -10,18 +10,17 @@ export default function AddEntryPage() {
   const [message, setMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const fileInputRef = useRef(null);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setMessage(""); // Clear any previous messages
+    setMessage("");
     let uploadedImageUrl = "";
     let uploadedPublicId = "";
+    let metadata = {};
 
     if (image) {
       setIsSubmitting(true);
       try {
-        //  Uploading Image to Server-Side API
         const formData = new FormData();
         formData.append("image", image);
 
@@ -36,28 +35,27 @@ export default function AddEntryPage() {
         }
 
         const uploadData = await uploadResponse.json();
-
         uploadedImageUrl = uploadData.imageUrl;
         uploadedPublicId = uploadData.publicId;
+        metadata = uploadData.metadata;
+
         setMessage("Image uploaded successfully.");
       } catch (error) {
         console.error("Error uploading image:", error);
         setMessage(`Image Upload Error: ${error.message}`);
         setIsSubmitting(false);
-        return; // Exit the function if image upload fails
+        return;
       }
     }
 
     try {
-      //  Form Data to MongoDB API with image url
       const res = await fetch("/api/entries", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
           notes,
+          metadata,
           imageUrl: uploadedImageUrl,
           publicId: uploadedPublicId,
         }),
@@ -184,3 +182,80 @@ export default function AddEntryPage() {
     </div>
   );
 }
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   setMessage(""); // Clear any previous messages
+//   let uploadedImageUrl = "";
+//   let uploadedPublicId = "";
+//   let metadata = {};
+
+//   if (image) {
+//     setIsSubmitting(true);
+//     try {
+//       //  Uploading Image to Server-Side API
+//       const formData = new FormData();
+//       formData.append("image", image);
+
+//       const uploadResponse = await fetch("/api/upload-image", {
+//         method: "POST",
+//         body: formData,
+//       });
+
+//       if (!uploadResponse.ok) {
+//         const errorData = await uploadResponse.json();
+//         throw new Error(errorData.error || "Image upload failed.");
+//       }
+
+//       const uploadData = await uploadResponse.json();
+
+//       uploadedImageUrl = uploadData.imageUrl;
+//       uploadedPublicId = uploadData.publicId;
+//       metadata = uploadData.metadata;
+//       setMessage("Image uploaded successfully.");
+//     } catch (error) {
+//       console.error("Error uploading image:", error);
+//       setMessage(`Image Upload Error: ${error.message}`);
+//       setIsSubmitting(false);
+//       return; // Exit the function if image upload fails
+//     }
+//   }
+
+//   try {
+//     //  Form Data to MongoDB API with image url
+//     const res = await fetch("/api/entries", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify({
+//         title,
+//         notes,
+//         imageUrl: uploadedImageUrl,
+//         publicId: uploadedPublicId,
+//         metadata,
+//       }),
+//     });
+
+//     if (res.ok) {
+//       setMessage("Entry added successfully!");
+//       setTitle("");
+//       setNotes("");
+//       setImage(null);
+//       if (fileInputRef.current) {
+//         fileInputRef.current.value = "";
+//       }
+//     } else {
+//       const errorData = await res.json();
+//       setMessage(
+//         `Submission Error: ${errorData.error || "Failed to add entry."}`
+//       );
+//     }
+//   } catch (error) {
+//     console.error("Error submitting form:", error);
+//     setMessage(`Submission Error: ${error.message || "An error occurred."}`);
+//   } finally {
+//     setIsSubmitting(false);
+//   }
+// };
