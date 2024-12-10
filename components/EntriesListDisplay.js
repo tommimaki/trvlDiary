@@ -85,7 +85,7 @@ const EntriesListDisplay = () => {
               key={entry._id}
               className=" flex border p-4 bg-slate-700 rounded-lg"
             >
-              <div className="flex-1 flex border border-red-200">
+              <div className="flex-1 flex ">
                 {entry.imageUrl && (
                   <Image
                     src={entry.imageUrl}
@@ -111,7 +111,7 @@ const EntriesListDisplay = () => {
                   </Link>
                 </div>
               </div>
-              <div className="flex flex-col border border-red-200">
+              <div className="flex flex-col p-2 border-l border-red-200">
                 <DeleteComponent
                   entryId={entry._id}
                   onDeleteSuccess={() => {

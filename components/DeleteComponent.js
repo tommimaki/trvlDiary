@@ -1,5 +1,6 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const DeleteComponent = ({
@@ -7,6 +8,7 @@ const DeleteComponent = ({
   onDeleteSuccess, // Pass the callback from parent
   redirectAfterDelete = null, // Default to null for list view
 }) => {
+  const { data: session } = useSession(); // Check session status
   const router = useRouter();
 
   const handleDelete = async () => {
@@ -41,6 +43,11 @@ const DeleteComponent = ({
       alert("An unexpected error occurred.");
     }
   };
+
+  // If the user is not logged in, do not show the button
+  if (!session) {
+    return null;
+  }
 
   return (
     <button

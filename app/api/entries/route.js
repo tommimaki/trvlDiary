@@ -1,21 +1,6 @@
 import dbConnect from "@/lib/mongoose";
 import Entry from "@/models/Entry";
 
-// // haetaan kaikki entryt
-// export async function GET(req) {
-//   await dbConnect(); //db connection
-
-//   try {
-//     const entries = await Entry.find(); //otetaan kaikki entryt
-//     return new Response(JSON.stringify(entries), { status: 200 }); // palautetaan stringifyed
-//   } catch (error) {
-//     return new Response(JSON.stringify({ error: "error fetching entries" }), {
-//       //error catch
-//       status: 500,
-//     });
-//   }
-// }
-
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
   await dbConnect();
