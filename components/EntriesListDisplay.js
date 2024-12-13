@@ -86,7 +86,7 @@ const EntriesListDisplay = () => {
           onChange={(e) => setSortOrder(e.target.value)}
         >
           <option value="newest">Newest</option>
-          <option value="latest">Latest</option>
+          <option value="Oldest">Oldest</option>
         </select>
       </div>
       <h1 className="text-2xl font-bold">Entries</h1>

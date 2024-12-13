@@ -12,8 +12,8 @@ const Header = () => {
         <Link href="/" className="text-white hover:underline">
           Home
         </Link>
-        <Link href="/entries" className="text-white hover:underline">
-          Entries
+        <Link href="/map" className="text-white hover:underline">
+          Map
         </Link>
         {session && (
           <Link href="/entries/add" className="text-white hover:underline">
