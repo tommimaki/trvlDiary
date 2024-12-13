@@ -69,6 +69,15 @@ export default async function EntryPage({ params }) {
             <p className="text-lg text-gray-700 mb-6 whitespace-pre-wrap">
               {entry.notes}
             </p>
+
+            {/* Location Information */}
+            {entry.latitude && entry.longitude && (
+              <div className="text-gray-700 mb-6">
+                <p>
+                  Coordinates: {entry.latitude}, {entry.longitude}
+                </p>
+              </div>
+            )}
           </div>
           {/* Entry Image */}
           {entry.imageUrl && (
@@ -88,11 +97,7 @@ export default async function EntryPage({ params }) {
 
         {/* Location Information */}
         {entry.latitude && entry.longitude && (
-          <div className="text-gray-700 mb-6">
-            <p>
-              Coordinates: {entry.latitude}, {entry.longitude}
-            </p>
-
+          <div className="text-gray-700 mt-4 mb-6">
             {/* Map Display */}
             <SingleViewMap
               latitude={entry.latitude}
@@ -102,11 +107,13 @@ export default async function EntryPage({ params }) {
         )}
 
         {/* Edit and Delete Actions */}
-        <EditModalClient entry={serializeEntry(entry)} />
-        <DeleteComponent
-          entryId={serializeEntry(entry)._id}
-          redirectAfterDelete="/"
-        />
+        <div className="flex">
+          <EditModalClient entry={serializeEntry(entry)} />
+          <DeleteComponent
+            entryId={serializeEntry(entry)._id}
+            redirectAfterDelete="/"
+          />
+        </div>
       </div>
     </div>
   );
