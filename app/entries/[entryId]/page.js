@@ -52,6 +52,11 @@ export default async function EntryPage({ params }) {
 
         {/* Entry Title */}
         <h1 className="text-4xl font-bold text-gray-800 mb-4">{entry.title}</h1>
+        {entry.locationName && (
+          <h3 className="text-4xl font-bold text-gray-800 mb-4">
+            {entry.locationName}
+          </h3>
+        )}
 
         {/* Entry Image */}
         {entry.imageUrl && (
@@ -97,10 +102,10 @@ export default async function EntryPage({ params }) {
               </p>
             )}
             {/* Map Display */}
-            <SingleViewMap
+            {/* <SingleViewMap
               latitude={entry.latitude}
               longitude={entry.longitude}
-            />
+            /> */}
           </div>
         )}
 
