@@ -9,7 +9,7 @@ const mapContainerStyle = {
 
 const SingleViewMap = ({ latitude, longitude }) => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, // Replace with your API key
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY, // Updated
   });
 
   if (!isLoaded) return <div>Loading Map...</div>;

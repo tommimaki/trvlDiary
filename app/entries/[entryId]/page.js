@@ -51,36 +51,39 @@ export default async function EntryPage({ params }) {
         </Link>
 
         {/* Entry Title */}
-        <h1 className="text-4xl font-bold text-gray-800 mb-4">{entry.title}</h1>
-        {entry.locationName && (
-          <h3 className="text-4xl font-bold text-gray-800 mb-4">
-            {entry.locationName}
-          </h3>
-        )}
-
-        {/* Entry Image */}
-        {entry.imageUrl && (
-          <div className="relative w-full h-64 mb-6">
-            <Image
-              src={entry.imageUrl}
-              alt={entry.title}
-              layout="fill"
-              className="rounded-md object-cover"
-              placeholder="blur"
-              blurDataURL="/placeholder.png"
-              unoptimized
-            />
+        <div className="flex">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-800 mb-4">
+              {entry.title}
+            </h1>
+            {entry.locationName && (
+              <h3 className="text-xl font-bold text-gray-800 mb-4">
+                {entry.locationName}
+              </h3>
+            )}
+            {/* Entry Metadata */}
+            <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 mb-6">
+              <span>Date: {displayDate}</span>
+            </div>
+            {/* Entry Notes */}
+            <p className="text-lg text-gray-700 mb-6 whitespace-pre-wrap">
+              {entry.notes}
+            </p>
           </div>
-        )}
-
-        {/* Entry Notes */}
-        <p className="text-lg text-gray-700 mb-6 whitespace-pre-wrap">
-          {entry.notes}
-        </p>
-
-        {/* Entry Metadata */}
-        <div className="flex flex-col sm:flex-row sm:justify-between text-sm text-gray-500 mb-6">
-          <span>Date: {displayDate}</span>
+          {/* Entry Image */}
+          {entry.imageUrl && (
+            <div className="relative w-full h-96">
+              <Image
+                src={entry.imageUrl}
+                alt={entry.title}
+                layout="fill"
+                className="rounded-md object-contain"
+                placeholder="blur"
+                blurDataURL="/placeholder.png"
+                unoptimized
+              />
+            </div>
+          )}
         </div>
 
         {/* Location Information */}
@@ -89,23 +92,12 @@ export default async function EntryPage({ params }) {
             <p>
               Coordinates: {entry.latitude}, {entry.longitude}
             </p>
-            {googleMapsUrl && (
-              <p>
-                <a
-                  href={googleMapsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-indigo-600 hover:text-indigo-800"
-                >
-                  View on Google Maps
-                </a>
-              </p>
-            )}
+
             {/* Map Display */}
-            {/* <SingleViewMap
+            <SingleViewMap
               latitude={entry.latitude}
               longitude={entry.longitude}
-            /> */}
+            />
           </div>
         )}
 
